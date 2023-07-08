@@ -4,6 +4,9 @@ const fs = require("fs")
 const port = 3000;
 const path = require("path")
 const app = express();
+const cors = require('cors')
+
+app.use(cors())
 
 let data = [];
 

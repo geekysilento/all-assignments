@@ -66,6 +66,7 @@ app.post('/admin/signup', (req, res) => {
     }
 
   }
+  
   Admin.findOne({ username }).then(callback);
 });
 
