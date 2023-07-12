@@ -2,24 +2,34 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const app = express();
+const cors = require('cors');
+const mongoose = require('mongoose');
+app.use(cors());
 
 app.use(express.json());
+
+const adminSchema = new mongoose.Schema({
+  username: {type: String},
+  password: String
+})
+
+const Admin = mongoose.model('admin', adminSchema)
+mongoose.connect('mongodb+srv://geeky_silento:qetuoadgjlzcbm13579@cluster0.12njzrb.mongodb.net/Course-App')
 
 let ADMINS = [];
 let USERS = [];
 let COURSES = [];
 
-// Read data from file, or initialize to empty array if file does not exist
-try {
-    ADMINS = JSON.parse(fs.readFileSync('admins.json', 'utf8'));
-    USERS = JSON.parse(fs.readFileSync('users.json', 'utf8'));
-    COURSES = JSON.parse(fs.readFileSync('courses.json', 'utf8'));
-} catch {
-    ADMINS = [];
-    USERS = [];
-    COURSES = [];
-}
-console.log(ADMINS);
+// try {
+//   ADMINS = JSON.parse(fs.readFileSync('admins.json', 'utf8'));
+//   USERS = JSON.parse(fs.readFileSync('users.json', 'utf8'));
+//   COURSES = JSON.parse(fs.readFileSync('courses.json', 'utf8'));
+// } catch {
+//   ADMINS = [];
+//   USERS = [];
+//   COURSES = [];
+// }
+// console.log(ADMINS);
 
 const SECRET = 'my-secret-key';
 
@@ -40,16 +50,17 @@ const authenticateJwt = (req, res, next) => {
 };
 
 // Admin routes
-app.post('/admin/signup', (req, res) => {
-  const { email } = req.body;
-  const admin = ADMINS.find(a => a.email === username);
+app.post('/admin/signup', async (req, res) => {
+  const { username, password } = req.body;
+  const admin = await Admin.findOne({username, password});
   console.log("admin signup");
   if (admin) {
     res.status(403).json({ message: 'Admin already exists' });
   } else {
-    const newAdmin = {email};
-    ADMINS.push(newAdmin);
-    fs.writeFileSync('admins.json', JSON.stringify(ADMINS));
+    const obj = {username, password};
+    const newAdmin = new Admin(obj);
+    newAdmin.save();
+    
     const token = jwt.sign({ username, role: 'admin' }, SECRET, { expiresIn: '1h' });
     res.json({ message: 'Admin created successfully', token });
   }
