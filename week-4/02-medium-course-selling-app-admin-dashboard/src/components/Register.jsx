@@ -70,6 +70,7 @@ function Register() {
             <Button variant="contained" onClick={sendRegister}>
               Register
             </Button>
+            
           </form>
 
           <p>

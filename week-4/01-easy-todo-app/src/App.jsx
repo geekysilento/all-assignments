@@ -39,24 +39,24 @@ function App() {
 
   const sendTodo = async event => {
     event.preventDefault();
-    const response = await fetch('http://localhost:3000/todos', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        title,
-        desc,
-      }),
-    });
+    // const response = await fetch('http://localhost:3000/todos', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     title,
+    //     desc,
+    //   }),
+    // });
 
-    if (response.ok) {
-      // Clear input fields after submitting
-      setTitle('');
-      setDesc('');
-    } else {
-      console.log(response.statusText);
-    }
+    // if (response.ok) {
+    //   // Clear input fields after submitting
+    //   setTitle('');
+    //   setDesc('');
+    // } else {
+    //   console.log(response.statusText);
+    // }
   };
 
   return (

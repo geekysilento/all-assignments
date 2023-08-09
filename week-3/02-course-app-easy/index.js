@@ -42,7 +42,6 @@ app.post('/admin/signup', (req, res) => {
   }
   ADMINS.push(signupDetails)
   res.status(200).send("Admin created successfully")
-  
 });
 
 app.post('/admin/login', (req, res) => {
